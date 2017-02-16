@@ -1,3 +1,18 @@
+/***************************************************************************
+
+                                                Kimiko Yamamoto
+                                                CSE 100, Winter 2017
+                                                2/15/17
+                                                
+                              Assignment 3
+
+File Name:      HCTree.h
+Description:    This header file creates the Huffman Tree object.  It also
+                defines the functions necessary to build, encode, and decode 
+                the tree.
+
+***************************************************************************/
+
 #ifndef HCTREE_H
 #define HCTREE_H
 
@@ -31,6 +46,9 @@ private:
     HCNode* root;
     vector<HCNode*> leaves;
 
+    /* This is a helper for the destructor */
+    static void deleteAll(HCNode* n);
+
 public:
     // explicit keyword is used to avoid accidental implicit conversions
     explicit HCTree() : root(0) {
@@ -38,7 +56,7 @@ public:
     }
 
     ~HCTree();
-
+ 
     /** Use the Huffman algorithm to build a Huffman coding trie.
      *  PRECONDITION: freqs is a vector of ints, such that freqs[i] is 
      *  the frequency of occurrence of byte i in the message.

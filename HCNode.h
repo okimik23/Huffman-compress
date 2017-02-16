@@ -1,3 +1,19 @@
+/***************************************************************************
+
+                                                Kimiko Yamamoto
+                                                CSE 100, Winter 2017
+                                                2/15/17
+                                                
+                              Assignment 3
+
+File Name:      HCNode.h
+Description:    This header file creates a HCNode object to create the nodes
+                of the Huffman tree.  It also has an overloaded operator in 
+                which to order the nodes in terms of frequency or otherwise
+                break ties.
+
+***************************************************************************/
+
 #ifndef HCNODE_H
 #define HCNODE_H
 
