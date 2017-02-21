@@ -16,6 +16,8 @@ Description:    This program opens a file to read. The contents of this file
 
 #include "HCNode.h"
 #include "HCTree.h"
+#include "BitOutputStream.h"
+#include "BitInputStream.h"
 #include <iostream>
 #include <vector>
 
@@ -26,7 +28,7 @@ int main(int argc, char** argv)
   
   //open file to read
   ifstream ifs;
-  ifs.open(argv[1]);
+  ifs.open(argv[1], ios::binary);
   if( ifs.fail() ) {
     cout << "Error: Input file failed to open" << endl;
     return -1;
@@ -49,12 +51,12 @@ int main(int argc, char** argv)
 
   //open file to write
   ofstream ofs;
-  ofs.open(argv[2]);
+  ofs.open(argv[2], ios::binary);
   if( ofs.fail() ) {
     cout << "Error: Output file failed to open" << endl;
     return -1;
   }
-  
+
   //"file header"
   for( int i = 0; i < freq.size(); ++i) {
     ofs << freq[i] << endl;
@@ -63,11 +65,13 @@ int main(int argc, char** argv)
   //open input file again
   ifs.open(argv[1]);
 
+  BitOutputStream out(ofs);
   //encode 
   while( ifs.get(value) ) {
     if( ifs.eof() )break;
-    tree.encode( value, ofs );
+    tree.encode( value, out );
   }
+  out.flush();
 
   ifs.close();
   ofs.close();

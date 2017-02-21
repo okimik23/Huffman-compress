@@ -83,11 +83,11 @@ void HCTree::build( const vector<int>& freqs ) {
 
 }
 
-void HCTree::encode(byte symbol, ofstream& out) const {
+void HCTree::encode(byte symbol, BitOutputStream& out) const {
 
   vector<int> bits;  //saves the bits to the char backwards
-
   HCNode* curr = leaves[symbol];
+
   //work up the tree
   while( curr != root ) {
     
@@ -103,28 +103,32 @@ void HCTree::encode(byte symbol, ofstream& out) const {
     curr = curr->p;
   }
 
-  reverse(bits.begin(), bits.end()); //saves bits forward 
+  //reverse(bits.begin(), bits.end()); //saves bits forward 
 
-  for( int i=0; i < bits.size(); ++i) {
-    out << bits[i];
+  //write bits to BitOutputStream
+  while( !bits.empty() ) {
+    out.writeBit(bits.back());
+    bits.pop_back();
   }
+
 }
 
-int HCTree::decode(ifstream& in) const {
+int HCTree::decode(BitInputStream& in) const {
 
   HCNode* curr = root;
-  char b;
-
+  int bit;
+  
   //go down the tree
   while( curr->c0 || curr->c1 ) {
-    in.get(b);
+    //read bits from BitInputStream
+    bit = in.readBit();
 
     //right node
-    if( b == '1' ) {
+    if( bit == 1 ) {
       curr = curr->c1;
     }
     //left node
-    else if( b == '0' ) {
+    else if( bit == 0 ) {
       curr = curr->c0;
     }
 
