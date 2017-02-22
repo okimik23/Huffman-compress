@@ -1,3 +1,17 @@
+/***************************************************************************
+
+                                                Kimiko Yamamoto
+                                                CSE 100, Winter 2017
+                                                2/15/17
+                                                
+                              Assignment 3
+
+File Name:      BitInputStream.h
+Description:    This header file allows the file to be read into a buffer
+                as bits.
+
+***************************************************************************/
+
 #ifndef BITINPUTSTREAM_H
 #define BITINPUTSTREAM_H
 

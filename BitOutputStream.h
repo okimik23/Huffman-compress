@@ -1,3 +1,18 @@
+/***************************************************************************
+
+                                                Kimiko Yamamoto
+                                                CSE 100, Winter 2017
+                                                2/15/17
+                                                
+                              Assignment 3
+
+File Name:      BitOutputStream.h
+Description:    This header file allows the file to be written to a buffer
+                as bits.
+
+***************************************************************************/
+
+
 #ifndef BITOUTPUTSTREAM_H
 #define BITOUTPUTSTREAM_H
 
