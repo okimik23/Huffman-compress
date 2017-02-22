@@ -97,6 +97,21 @@ public:
      */
     int decode(ifstream& in) const;
 
+    /** Function to write tree in the header using a 
+      * preorder traversal
+      */
+    void write_tree(HCNode* curr, BitOutputStream& out);
+
+    /** Function to construct tree from the header
+      * using preorder traversal
+      */
+    void construct_tree(HCNode* curr, int child, BitInputStream& in);
+
+    HCNode* get_root();
+
+    void set_root();
+    
+
 };
 
 #endif // HCTREE_H

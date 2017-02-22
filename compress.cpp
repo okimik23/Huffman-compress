@@ -20,6 +20,7 @@ Description:    This program opens a file to read. The contents of this file
 #include "BitInputStream.h"
 #include <iostream>
 #include <vector>
+#include <utility>
 
 using namespace std;
 
@@ -34,13 +35,18 @@ int main(int argc, char** argv)
     return -1;
   }
 
-  char value;
+  unsigned char value;
+  int count = 0;
   vector<int> freq = vector<int>(256, 0);
 
   //count number of occurrences of each byte value
-  while( ifs.get(value) ) {
+  while( 1 ) {
+    value = ifs.get();
     if( ifs.eof() ) break;
-    freq[value]++;
+    if( freq[(int)value] == 0 ) {
+      count++;
+    }
+    freq[(int)value]++;
   }
   
   ifs.close();
@@ -58,16 +64,21 @@ int main(int argc, char** argv)
   }
 
   //"file header"
+  ofs << count << endl;  
+
   for( int i = 0; i < freq.size(); ++i) {
-    ofs << freq[i] << endl;
+    if( freq[i] != 0 ) {
+      ofs << i << "\n" << freq[i] << endl;
+    }
   }
 
   //open input file again
-  ifs.open(argv[1]);
+  ifs.open(argv[1], ios::binary);
 
   BitOutputStream out(ofs);
   //encode 
-  while( ifs.get(value) ) {
+  while( 1 ) {
+    value = ifs.get();
     if( ifs.eof() )break;
     tree.encode( value, out );
   }

@@ -1,3 +1,16 @@
+/***************************************************************************
+
+                                                Kimiko Yamamoto
+                                                CSE 100, Winter 2017
+                                                2/15/17
+                                                
+                              Assignment 3
+
+File Name:      BitIntputStream.cpp
+Description:    This file has functions to read the bits from the istream.
+
+***************************************************************************/
+
 #include "BitInputStream.h"
 #include <iostream>
 

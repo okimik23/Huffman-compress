@@ -1,3 +1,16 @@
+/***************************************************************************
+
+                                                Kimiko Yamamoto
+                                                CSE 100, Winter 2017
+                                                2/15/17
+                                                
+                              Assignment 3
+
+File Name:      BitOutputStream.cpp
+Description:    This file has functions to write the bits to the ostream.
+
+***************************************************************************/
+
 #include "BitOutputStream.h"
 #include <iostream>
 

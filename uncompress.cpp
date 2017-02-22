@@ -31,18 +31,23 @@ int main(int argc, char** argv)
   if( ifs.fail() ) {
     cout << "Error: Input file failed to open" << endl;
     return -1;
-  }
+  } 
 
   int value;
   int total;
+  int f; //frequency
+  int count; //num of freq elements
+  ifs >> count;
   vector<int> freqs = vector<int>(256, 0);
 
   //read file header 
-  for( int i=0; i < freqs.size(); ++i ) {
+  for( int i=0; i < count; i++) {
     ifs >> value;
     if( ifs.eof() ) break;
-    freqs[i] = value;
-    total += value;
+    ifs >> f;
+    if( ifs.eof() ) break;
+    freqs[value] = f;
+    total += f;
   }
   
   //reconstruct Huffman coding tree

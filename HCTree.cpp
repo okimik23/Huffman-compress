@@ -22,6 +22,7 @@ Description:    This program helps to create the Huffman coding tree for
 #include <fstream>
 #include <queue>
 #include <algorithm>
+#include <utility>
 
 using namespace std;
 
@@ -55,6 +56,10 @@ void HCTree::build( const vector<int>& freqs ) {
     }
   }
   
+  if( pq.size() == 0 ) {
+    return;
+  }
+  
   if( pq.size() == 1) {
     pq.push(new HCNode(0, 0));
   }
@@ -78,8 +83,7 @@ void HCTree::build( const vector<int>& freqs ) {
 
     pq.push(parent);
   }
-  
-  root = pq.top();
+    root = pq.top();
 
 }
 
@@ -102,9 +106,7 @@ void HCTree::encode(byte symbol, BitOutputStream& out) const {
 
     curr = curr->p;
   }
-
-  //reverse(bits.begin(), bits.end()); //saves bits forward 
-
+//reverse(bits.begin(), bits.end()); //saves bits forward 
   //write bits to BitOutputStream
   while( !bits.empty() ) {
     out.writeBit(bits.back());
@@ -136,3 +138,80 @@ int HCTree::decode(BitInputStream& in) const {
   
   return curr->symbol;
 }
+
+
+/** Function to write tree in the header using a 
+  * preorder traversal
+  */
+void HCTree::write_tree(HCNode* curr, BitOutputStream& out){
+  
+  //curr is a leaf
+  if( (curr->c0 == 0) && (curr->c1)) {
+    out.writeBit(1);
+    
+    for( int i=0; i < 8; i++) {
+      out.writeBit(((1 << (7-i)) & curr->symbol) >> (7-i));
+    }
+    
+    return;
+  }
+  //curr is not an ascii node
+  else {
+    out.writeBit(0);
+  }
+
+}
+
+/** Function to construct tree from the header
+  * using preorder traversal
+  */
+void HCTree::construct_tree(HCNode* curr, int child, BitInputStream& in){
+
+  int bit = in.readBit();
+
+  //leaf node
+  if( bit == 1) {
+    //make node
+    unsigned int sym = 0;
+    for( int i=7; i >0; i--) {
+      sym += in.readBit() << i;
+    }
+
+    HCNode* new_node = new HCNode(0, (char)sym);
+    leaves[sym] = new_node;
+
+    //connect new_node to trie
+    new_node->p = curr;
+    if( curr > new_node ) {  //change to curr > new_node?
+      curr->c0 = new_node;
+    }
+    else{
+      curr->c1 = new_node;
+    }
+  }
+  //not a leaf
+  else {
+    HCNode* notaleaf = new HCNode(0,0);
+    
+    notaleaf->p = curr;
+    if( curr > notaleaf ) {  //same as above?
+      curr->c0 = notaleaf;
+    }
+    else{
+      curr->c1 = notaleaf;
+    }
+
+    construct_tree(notaleaf, 0, in);  //left node
+    construct_tree(notaleaf, 1, in);  //right node
+  }
+ 
+}
+
+HCNode* HCTree::get_root() {
+  return root;
+}
+
+void HCTree::set_root() {
+  root = new HCNode(0,0);
+}
+
